@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;1,800&display=swap');
 * {
     margin: 0;
     padding: 0;
@@ -12,7 +13,7 @@ body{
 .calculator {
     width: 400px;
     margin: 0 auto;
-    background-color: #3f3f3f;
+    background-color: #2b7a43;
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 15px black;
@@ -25,39 +26,47 @@ body{
     height: 100px;
     margin-bottom: 20px;
     padding: 15px;
-    background-color: black;
+    background-color: rgb(10, 59, 21);
     color: white;
-    font: normal 4rem serif;
+    font: normal 3rem serif;
     overflow: hidden;
     border-radius: 5px;
-    box-shadow:  2px 2px 0px #555;
+    box-shadow:  2px 2px 0px rgb(28, 136, 24);
+    font-family: 'Roboto Mono', monospace;
+    font-weight: 800;
 }
 
 .calculator-buttons{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-gap: 10px;
+    font-family: 'Roboto Mono', monospace;
+    font-weight: 300;
 }
 
 .calculator button{
-    background-color: black;
+    background-color: rgb(7, 53, 17);
     color: white;
     padding: 20px;
     border-radius: 5px;
     font-size: 1.5rem;
     outline: none;
     cursor: pointer;
-    border: 2px solid black;
-    box-shadow:  2px 2px 0px #555;
+    border: 2px solid rgb(2, 58, 14);
+    box-shadow:  2px 2px 0px rgb(28, 136, 24);
+    transition: 0.4s;
 }
 
 button:hover{
+    transition: 0.4s;
     background-color: #e4e4e4;
     color: black;
     box-shadow: inset 2px 2px 0px #555;
     border: 0;
 }
-btn-hover{
+
+.button-hover{
+    transition: 0.4s;
     background-color: #e4e4e4;
     color: black;
     box-shadow: inset 2px 2px 0px #555;

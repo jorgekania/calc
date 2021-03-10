@@ -3,46 +3,100 @@
 const display = document.getElementById('display');
 const numeros = document.querySelectorAll('[id*=tecla]');
 const operadores = document.querySelectorAll('[id*=operador]');
+const backspace = document.getElementById('backspace');
+const qtdCaractere = 11;
+const colorBasic = '#fff';
+const colorError = 'red';
 
 let novoNumero = true;
 let operador;
 let numeroAnterior;
+let txt;
 
-const operacaoPendente = () => operador !== undefined;
+let operacaoPendente = () => operador !== undefined;
 
 //Método para fazer o cálculo
 const calcular = () => {
     if (operacaoPendente()) {
-        const numeroAtual = parseFloat(display.textContent.replace(',', '.'));
+        let numeroAtual = parseFloat(display.textContent.replace(',', '.'));
+        numeroAnterior = numeroAnterior.replace(',', '.');
         novoNumero = true;
-        const resultado = eval(`${numeroAnterior}${operador}${numeroAtual}`);
+        let resultado = eval(`${numeroAnterior}${operador}${numeroAtual}`);
         atualizarDisplay(resultado);
-
-        //Todos este código é substitui tudo pela variável resultado
-        // if (operador === '+') {
-        //     atualizarDisplay(numeroAnterior + numeroAtual);
-        // } else if (operador === '-') {
-        //     atualizarDisplay(numeroAnterior - numeroAtual);
-        // } else if (operador === '*') {
-        //     atualizarDisplay(numeroAnterior * numeroAtual);
-        // } else if (operador === '/') {
-        //     atualizarDisplay(numeroAnterior / numeroAtual);
-        // }
     }
 }
 
 //Método para atualizar o display
 const atualizarDisplay = (texto) => {
-    if (novoNumero) {
-        display.textContent = texto.toLocaleString('BR');
-        novoNumero = false;
+
+    display.style.color = colorBasic;
+    //Limitar a quantidade de carácter no display
+    if (display.textContent.length >= qtdCaractere) {
+        limparCalculo();
+        display.textContent = 'Erro';
+        display.style.color = colorError;
+
     } else {
-        display.textContent += texto;
+
+        if (novoNumero) {
+
+            console.log('É NOVO NÚMERO')
+
+            display.textContent = texto.toLocaleString('BR');
+            novoNumero = false;
+
+        } else {
+
+            console.log('NÃO É NOVO NÚMERO')
+
+
+            display.textContent += texto;
+
+            //Mostrar no display os dígitos e resultado
+
+            console.log('Total no display: ' + display.textContent.length)
+
+            console.log('Display dentro do else: ' + display.textContent)
+
+
+            display.style.color = colorBasic;
+
+            let [partInt, partDec] = display.textContent.split(',');
+            let v = '';
+            let c = 0;
+            partInt = partInt.replace('.', '');
+
+            console.log('Part Int e Part Dec: ' + partInt + ' - ' + partDec)
+
+            //Formata de 3 em 3 casas no display
+            for (let i = partInt.length - 1; i >= 0; i--) {
+
+                console.log('Inicio do for: ' + c)
+
+                if (++c > 3) {
+                    v = '.' + v;
+                    c = 0;
+
+                    console.log('----> aqui')
+                }
+                console.log('Final do For: ' + c)
+                v = partInt[i] + v;
+
+            }
+
+            v = v + (partDec ? ',' + partDec : '');
+
+            console.log('Valor de v2:  ' + v)
+
+            display.textContent = v;
+        }
     }
+    console.log('Total novo no Display:  ' + display.textContent.length)
+    console.log('No display agora: ' + display.textContent)
+    console.log('====================================')
 };
 
 const inserirNumero = (evento) => atualizarDisplay(evento.target.textContent);
-
 numeros.forEach(numero => numero.addEventListener('click', inserirNumero));
 
 const selecionarOperador = (evento) => {
@@ -50,9 +104,8 @@ const selecionarOperador = (evento) => {
         calcular();
         novoNumero = true;
         operador = evento.target.textContent;
-        numeroAnterior = parseFloat(display.textContent.replace(',', '.'));
+        numeroAnterior = display.textContent.replace('.', '');
     }
-
 }
 operadores.forEach(operador => operador.addEventListener('click', selecionarOperador));
 
@@ -74,11 +127,12 @@ const limparCalculo = () => {
     novoNumero = true;
     numeroAnterior = undefined;
 }
-document.getElementById('limparCalculo').addEventListener('click', limparCalculo);
+document.getElementById('limparDisplay').addEventListener('click', limparCalculo);
 
 //Backspace
 const removerUltimoNumero = () => display.textContent = display.textContent.slice(0, -1);
-document.getElementById('backspace').addEventListener('click', removerUltimoNumero);
+backspace.addEventListener('click', removerUltimoNumero);
+
 
 //Positivo ou Negativo
 const inverterSinal = () => {
@@ -88,15 +142,13 @@ const inverterSinal = () => {
 document.getElementById('inverter').addEventListener('click', inverterSinal);
 
 //Virgula ou Decimal
-const existeDecimal = () => display.textContent.indexOf(',') !== -1;
-const existeValor = () => display.textContent.length > 0;
-
 const inserirDecimal = () => {
-    if (!existeDecimal()) {
-        if (existeValor()) {
-            atualizarDisplay(',');
-        } else {
-            atualizarDisplay('0,');
+    if (novoNumero) {
+        display.textContent = '0,';
+        novoNumero = false;
+    } else {
+        if (display.textContent.indexOf(',') == -1) {
+            display.textContent += ',';
         }
     }
 }
@@ -108,6 +160,7 @@ const mapaTeclado = {
     '1': 'tecla1',
     '2': 'tecla2',
     '3': 'tecla3',
+    '4': 'tecla4',
     '5': 'tecla5',
     '6': 'tecla6',
     '7': 'tecla7',
@@ -117,11 +170,12 @@ const mapaTeclado = {
     '*': 'operadorMultiplicar',
     '-': 'operadorSubtrair',
     '+': 'operadorAdicionar',
+    '%': 'operadorPorcentagem',
     '=': 'igual',
     'Enter': 'igual',
     'Backspace': 'backspace',
     'c': 'limparDisplay',
-    'Escape': 'limparCalculo',
+    'Escape': 'limparDisplay',
     ',': 'decimal'
 }
 
@@ -130,11 +184,13 @@ const mapearTeclado = (evento) => {
     const teclaPermitida = () => Object.keys(mapaTeclado).indexOf(tecla) !== -1;
 
     if (teclaPermitida()) {
-        const mouseOver = () => teclaPermitida.style.background = "blue";
-        const mouseOut = () => teclaPermitida.style.background = "pink";
         document.getElementById(mapaTeclado[tecla]).click();
-        document.getElementById(mapaTeclado[tecla]).addEventListener("mouseover", mouseOver);
-        document.getElementById(mapaTeclado[tecla]).addEventListener("mouseout", mouseOut);
+
+        document.getElementById(mapaTeclado[tecla]).classList.add("button-hover");
+
+        setTimeout(function () {
+            document.getElementById(mapaTeclado[tecla]).classList.remove("button-hover");
+        }, 500);
     }
 }
 
