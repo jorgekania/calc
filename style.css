@@ -7,7 +7,7 @@
 
 body{
     background-color: #F9F9F9;
-    /* padding: 90px 0; */
+    padding: 90px 0;
 }
 
 .calculator {
@@ -52,7 +52,7 @@ body{
     font-size: 1.5rem;
     outline: none;
     cursor: pointer;
-    border: 2px solid rgb(2, 58, 14);
+    border: 1px solid rgb(2, 58, 14);
     box-shadow:  2px 2px 0px rgb(28, 136, 24);
     transition: 0.4s;
 }
@@ -71,4 +71,36 @@ button:hover{
     color: black;
     box-shadow: inset 2px 2px 0px #555;
     border: 0;
+}
+
+#operadorPorcentagem, 
+#operadorMultiplicar, 
+#operadorSubtrair, 
+#operadorAdicionar, 
+#igual, 
+#operadorDividir{
+    font-family: 'Roboto Mono', monospace !important;
+    background-color: rgb(60, 90, 20) !important;
+    color: white !important;
+    padding: 20px !important;
+    border-radius: 5px !important;
+    font-size: 1.5rem !important;
+    outline: none !important;
+    cursor: pointer !important;
+    border: 2px solid rgb(2, 58, 14) !important;
+    box-shadow:  2px 2px 0px rgb(28, 136, 24) !important;
+    transition: 0.4s !important;
+}
+
+#operadorPorcentagem:hover, 
+#operadorMultiplicar:hover, 
+#operadorSubtrair:hover, 
+#operadorAdicionar:hover, 
+#igual:hover, 
+#operadorDividir:hover{
+    transition: 0.4s !important;
+    background-color: #e4e4e4 !important;
+    color: black !important;
+    box-shadow: inset 2px 2px 0px #555 !important;
+    border: 2px solid rgb(2, 58, 14) !important;
 }
