@@ -9,6 +9,7 @@ const colorBasic = '#fff';
 const colorError = 'red';
 
 let novoNumero = true;
+let numeroAtual;
 let operador;
 let numeroAnterior;
 let txt;
@@ -18,7 +19,6 @@ let operacaoPendente = () => operador !== undefined;
 //Método para fazer o cálculo
 const calcular = () => {
     if (operacaoPendente()) {
-        let numeroAtual = parseFloat(display.textContent.replace(',', '.'));
         numeroAnterior = numeroAnterior.replace(',', '.');
         novoNumero = true;
         let resultado = eval(`${numeroAnterior}${operador}${numeroAtual}`);
@@ -100,11 +100,22 @@ const inserirNumero = (evento) => atualizarDisplay(evento.target.textContent);
 numeros.forEach(numero => numero.addEventListener('click', inserirNumero));
 
 const selecionarOperador = (evento) => {
+
     if (!novoNumero) {
-        calcular();
-        novoNumero = true;
-        operador = evento.target.textContent;
-        numeroAnterior = display.textContent.replace('.', '');
+        if (evento.target.textContent == '%') {
+            operador = '*';
+            numeroAtual = parseFloat(display.textContent.replace(',', '.')) / 100;
+            ativarIgual();
+            novoNumero = true;
+            numeroAnterior = display.textContent.replace('.', '');
+        } else {
+            calcular();
+            novoNumero = true;
+            operador = evento.target.textContent;
+            numeroAnterior = display.textContent.replace('.', '');
+        }
+        console.log('Valor Pendente: ' + numeroAnterior)
+        console.log('Valor Atual: ' + numeroAtual)
     }
 }
 operadores.forEach(operador => operador.addEventListener('click', selecionarOperador));
