@@ -12,6 +12,7 @@ let novoNumero = true;
 let numeroAtual;
 let operador;
 let numeroAnterior;
+let resultado;
 let txt;
 
 let operacaoPendente = () => operador !== undefined;
@@ -19,15 +20,32 @@ let operacaoPendente = () => operador !== undefined;
 //Método para fazer o cálculo
 const calcular = () => {
     if (operacaoPendente()) {
+
+        console.log('--> CALCULAR')
+
+
+        numeroAtual = parseFloat(display.textContent.replace(',', '.'));
         numeroAnterior = numeroAnterior.replace(',', '.');
+
+
+        console.log('----> 0 - Operador atual: ' + operador)
+
         novoNumero = true;
-        let resultado = eval(`${numeroAnterior}${operador}${numeroAtual}`);
+        resultado = eval(`${numeroAnterior}${operador}${numeroAtual}`);
         atualizarDisplay(resultado);
+
+        console.log('----> 1 ELSE - Valor Pendente: ' + numeroAnterior)
+        console.log('----> 1 ELSE - Valor Atual: ' + numeroAtual)
+        console.log('----> 1 ELSE - Operador: ' + operador)
+
+
     }
 }
 
 //Método para atualizar o display
 const atualizarDisplay = (texto) => {
+
+    console.log('--> ATUALIZAR DISPLAY')
 
     display.style.color = colorBasic;
     //Limitar a quantidade de carácter no display
@@ -40,23 +58,23 @@ const atualizarDisplay = (texto) => {
 
         if (novoNumero) {
 
-            console.log('É NOVO NÚMERO')
+            console.log('----> É NOVO NÚMERO')
 
             display.textContent = texto.toLocaleString('BR');
             novoNumero = false;
 
         } else {
 
-            console.log('NÃO É NOVO NÚMERO')
+            console.log('----> NÃO É NOVO NÚMERO')
 
 
             display.textContent += texto;
 
             //Mostrar no display os dígitos e resultado
 
-            console.log('Total no display: ' + display.textContent.length)
+            console.log('--------> Total no display: ' + display.textContent.length)
 
-            console.log('Display dentro do else: ' + display.textContent)
+            console.log('--------> Display dentro do else: ' + display.textContent)
 
 
             display.style.color = colorBasic;
@@ -66,33 +84,33 @@ const atualizarDisplay = (texto) => {
             let c = 0;
             partInt = partInt.replace('.', '');
 
-            console.log('Part Int e Part Dec: ' + partInt + ' - ' + partDec)
+            console.log('--------> Part Int e Part Dec: ' + partInt + ' - ' + partDec)
 
             //Formata de 3 em 3 casas no display
             for (let i = partInt.length - 1; i >= 0; i--) {
 
-                console.log('Inicio do for: ' + c)
+                console.log('--------> Inicio do for: ' + c)
 
                 if (++c > 3) {
                     v = '.' + v;
                     c = 0;
 
-                    console.log('----> aqui')
+                    console.log('--------> aqui')
                 }
-                console.log('Final do For: ' + c)
+                console.log('--------> Final do For: ' + c)
                 v = partInt[i] + v;
 
             }
 
             v = v + (partDec ? ',' + partDec : '');
 
-            console.log('Valor de v2:  ' + v)
+            console.log('------> Valor de v2:  ' + v)
 
             display.textContent = v;
         }
     }
-    console.log('Total novo no Display:  ' + display.textContent.length)
-    console.log('No display agora: ' + display.textContent)
+    console.log('------> Total novo no Display:  ' + display.textContent.length)
+    console.log('------> No display agora: ' + display.textContent)
     console.log('====================================')
 };
 
@@ -101,21 +119,40 @@ numeros.forEach(numero => numero.addEventListener('click', inserirNumero));
 
 const selecionarOperador = (evento) => {
 
+    console.log('----> SELECIONAR OPERADOR')
+
     if (!novoNumero) {
+
         if (evento.target.textContent == '%') {
-            operador = '*';
-            numeroAtual = parseFloat(display.textContent.replace(',', '.')) / 100;
-            ativarIgual();
+
+            numeroAtual = parseFloat(display.textContent.replace(',', '.'));
+
+            console.log('----> 3 Antes - Valor Atual: ' + numeroAtual)
+
+            numeroAtual = (numeroAtual / 100);
+            numeroAnterior = numeroAnterior.replace(',', '.');
             novoNumero = true;
-            numeroAnterior = display.textContent.replace('.', '');
+            resultado = eval(`${numeroAnterior}${operador}${numeroAtual}`);
+
+            console.log('----> 3 - Valor Atual: ' + numeroAtual)
+            console.log('----> 3 - Valor Anterior: ' + numeroAnterior)
+            console.log('----> 3 - Operador: ' + operador)
+
+            atualizarDisplay(resultado);
+            operador = undefined;
         } else {
+
             calcular();
-            novoNumero = true;
             operador = evento.target.textContent;
+
+            novoNumero = true;
             numeroAnterior = display.textContent.replace('.', '');
+
+            console.log('-----> 2 - Operador Atual: ' + operador)
+            console.log('-----> 2 - Valor Atual: ' + parseFloat(display.textContent.replace(',', '.')))
+            console.log('-----> 2 - Valor Pendente: ' + numeroAnterior)
+            console.log('====================================')
         }
-        console.log('Valor Pendente: ' + numeroAnterior)
-        console.log('Valor Atual: ' + numeroAtual)
     }
 }
 operadores.forEach(operador => operador.addEventListener('click', selecionarOperador));
@@ -154,6 +191,9 @@ document.getElementById('inverter').addEventListener('click', inverterSinal);
 
 //Virgula ou Decimal
 const inserirDecimal = () => {
+
+    console.log('----> INSERIR DECIMAL')
+
     if (novoNumero) {
         display.textContent = '0,';
         novoNumero = false;
@@ -206,3 +246,10 @@ const mapearTeclado = (evento) => {
 }
 
 document.addEventListener('keydown', mapearTeclado)
+
+function popup() {
+    let altura = document.getElementById('calculator').clientHeight;
+    let largura = document.getElementById('calculator').clientWidth;
+    let janela = 'index.html';
+    window.open(janela, 'popup', 'width=' + largura + ',height=' + altura + ', scrollbars=no, titlebar=no, location=no, status=no, menubar=no, directories=no, resizable=no, top=0, left=0')
+}
