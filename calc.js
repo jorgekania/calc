@@ -1,144 +1,182 @@
 'use strict';
 
+//Constantes a serem usadas
 const display = document.getElementById('display');
+const historic = document.getElementById('historic');
+const contaAtual = document.getElementById('contaAtual');
 const numeros = document.querySelectorAll('[id*=tecla]');
 const operadores = document.querySelectorAll('[id*=operador]');
 const backspace = document.getElementById('backspace');
 const qtdCaractere = 11;
 const colorBasic = '#fff';
-const colorError = 'red';
+const colorError = 'yellow';
 
+//Variáveis a serem usadas
 let novoNumero = true;
+let opPercent = false;
+let igualAtivado = false;
 let numeroAtual;
 let operador;
 let numeroAnterior;
 let resultado;
 let txt;
 
-let operacaoPendente = () => operador !== undefined;
+//console.clear()
+
+//Se tiver operação pendente
+let operacaoPendente = () => operador !== undefined
 
 //Método para fazer o cálculo
 const calcular = () => {
+
     if (operacaoPendente()) {
 
-        console.log('--> CALCULAR')
+        console.warn('%c ----> INICIANDO O CALCULAR', 'color: red')
 
-
-        numeroAtual = parseFloat(display.textContent.replace(',', '.'));
+        numeroAtual = parseFloat(contaAtual.textContent.replace(',', '.'));
         numeroAnterior = numeroAnterior.replace(',', '.');
-
-
-        console.log('----> 0 - Operador atual: ' + operador)
 
         novoNumero = true;
         resultado = eval(`${numeroAnterior}${operador}${numeroAtual}`);
+
+        console.log('%c --------> Valor Pendente: ' + numeroAnterior, 'color: blue')
+        console.log('%c --------> Valor Atual: ' + numeroAtual, 'color: blue')
+        console.log('%c --------> Operador: ' + operador, 'color: blue')
+        console.log('%c --------> Resultado: ' + resultado, 'color: blue')
+
         atualizarDisplay(resultado);
-
-        console.log('----> 1 ELSE - Valor Pendente: ' + numeroAnterior)
-        console.log('----> 1 ELSE - Valor Atual: ' + numeroAtual)
-        console.log('----> 1 ELSE - Operador: ' + operador)
-
-
     }
 }
+
+//Atualiza o histórico no display
+const displayHistoric = () => {
+
+    console.warn('%c ----> COLOCANDO OPERAÇÃO NO HISTÓRICO', 'color: red')
+
+    if (operacaoPendente()) {
+        if (opPercent) {
+
+            console.warn('%c ----> OPERAÇÃO PORCENTAGEM ATIVADA NO HISTÓRICO', 'color: red')
+
+            historic.textContent = numeroAnterior + operador + numeroAtual;
+            atualizarDisplay(resultado);
+            console.log('%c --------> - Histórico Número Atual:  ' + numeroAtual, 'color: blue')
+
+        } else {
+
+            if (igualAtivado) {
+                historic.textContent = numeroAnterior + operador + numeroAtual + '=';
+                console.log('%c --------> - Histórico Número Atual:  ' + numeroAtual, 'color: blue')
+            } else {
+                historic.textContent = numeroAnterior + operador;
+                contaAtual.textContent = '';
+            }
+        }
+    }
+    console.log('%c --------> - Histórico Operador Atual:  ' + operador, 'color: blue')
+    console.log('%c --------> - Histórico Numero Anterior: ' + numeroAnterior, 'color: blue')
+}
+
 
 //Método para atualizar o display
 const atualizarDisplay = (texto) => {
 
-    console.log('--> ATUALIZAR DISPLAY')
+    console.warn('%c ----> INICIANDO O ATUALIZAR DISPLAY', 'color: red')
 
-    display.style.color = colorBasic;
+    contaAtual.style.color = colorBasic;
     //Limitar a quantidade de carácter no display
-    if (display.textContent.length >= qtdCaractere) {
+    if (contaAtual.textContent.length >= qtdCaractere) {
+
+        console.warn('%c ----> CONTADOR MARCOU MAIOR QUE 10 DÍGITOS', 'color: red')
+
         limparCalculo();
-        display.textContent = 'Erro';
-        display.style.color = colorError;
+        contaAtual.textContent = 'Erro';
+        contaAtual.style.color = colorError;
 
     } else {
 
         if (novoNumero) {
 
-            console.log('----> É NOVO NÚMERO')
+            console.warn('%c ----> NOVO NÚMERO DETECTADO', 'color: red')
 
-            display.textContent = texto.toLocaleString('BR');
+            contaAtual.textContent = texto.toLocaleString('BR');
             novoNumero = false;
 
         } else {
 
-            console.log('----> NÃO É NOVO NÚMERO')
+            console.warn('%c ----> JÁ NÃO É MAIS NOVO NÚMERO ', 'color: red')
 
-
-            display.textContent += texto;
+            contaAtual.textContent += texto;
 
             //Mostrar no display os dígitos e resultado
+            contaAtual.style.color = colorBasic;
 
-            console.log('--------> Total no display: ' + display.textContent.length)
-
-            console.log('--------> Display dentro do else: ' + display.textContent)
-
-
-            display.style.color = colorBasic;
-
-            let [partInt, partDec] = display.textContent.split(',');
+            let [partInt, partDec] = contaAtual.textContent.split(',');
             let v = '';
             let c = 0;
             partInt = partInt.replace('.', '');
 
-            console.log('--------> Part Int e Part Dec: ' + partInt + ' - ' + partDec)
+            console.log('%c --------> Part Int: ' + partInt + ' » Part Dec: ' + partDec, 'color: green')
+            console.log('%c --------> Inicio do for: ' + c, 'color: blue')
 
-            //Formata de 3 em 3 casas no display
+            //Formata de 3 em 3 casas no contaAtual
             for (let i = partInt.length - 1; i >= 0; i--) {
-
-                console.log('--------> Inicio do for: ' + c)
 
                 if (++c > 3) {
                     v = '.' + v;
                     c = 0;
-
-                    console.log('--------> aqui')
                 }
-                console.log('--------> Final do For: ' + c)
+
                 v = partInt[i] + v;
 
             }
 
+            console.log('%c --------> Final do For: ' + c, 'color: blue')
+
             v = v + (partDec ? ',' + partDec : '');
 
-            console.log('------> Valor de v2:  ' + v)
+            console.log('%c --------> Valor de v2:  ' + v, 'color: blue')
 
-            display.textContent = v;
+            contaAtual.textContent = v;
         }
     }
-    console.log('------> Total novo no Display:  ' + display.textContent.length)
-    console.log('------> No display agora: ' + display.textContent)
-    console.log('====================================')
+    console.log('%c --------> Total de dígitos na Memória:  ' + contaAtual.textContent.length, 'color: blue')
+    console.log('%c --------> Valor do display agora: ' + contaAtual.textContent, 'color: blue')
 };
 
 const inserirNumero = (evento) => atualizarDisplay(evento.target.textContent);
 numeros.forEach(numero => numero.addEventListener('click', inserirNumero));
 
+
+//Responsável por verificar qual operador foi selecionado
+//Caso seja selecionado % será efetuado o cálculo aqui
+//Outro operador, mando para o calcular()
 const selecionarOperador = (evento) => {
 
-    console.log('----> SELECIONAR OPERADOR')
+    console.warn('%c ----> OPERADOR SELECIONADO ', 'color: red')
 
     if (!novoNumero) {
 
         if (evento.target.textContent == '%') {
 
-            numeroAtual = parseFloat(display.textContent.replace(',', '.'));
+            opPercent = true;
+            numeroAtual = parseFloat(contaAtual.textContent.replace(',', '.'));
 
-            console.log('----> 3 Antes - Valor Atual: ' + numeroAtual)
+            console.warn('%c ----> OPERAÇÃO DE PORCENTAGEM ATIVADA', 'color: red')
+            console.log('%c --------> Valor Atual: ' + numeroAtual, 'color: blue')
+
 
             numeroAtual = (numeroAtual / 100);
             numeroAnterior = numeroAnterior.replace(',', '.');
             novoNumero = true;
             resultado = eval(`${numeroAnterior}${operador}${numeroAtual}`);
 
-            console.log('----> 3 - Valor Atual: ' + numeroAtual)
-            console.log('----> 3 - Valor Anterior: ' + numeroAnterior)
-            console.log('----> 3 - Operador: ' + operador)
+            console.log('%c --------> Valor Atual Convertido: ' + numeroAtual, 'color: blue')
+            console.log('%c --------> Valor a Calcular: ' + numeroAnterior, 'color: blue')
+            console.log('%c --------> Operador: ' + operador, 'color: blue')
+            console.log('%c --------> Resultado: ' + resultado, 'color: blue')
 
-            atualizarDisplay(resultado);
+            displayHistoric();
             operador = undefined;
         } else {
 
@@ -146,60 +184,80 @@ const selecionarOperador = (evento) => {
             operador = evento.target.textContent;
 
             novoNumero = true;
-            numeroAnterior = display.textContent.replace('.', '');
+            numeroAnterior = contaAtual.textContent.replace('.', '');
 
-            console.log('-----> 2 - Operador Atual: ' + operador)
-            console.log('-----> 2 - Valor Atual: ' + parseFloat(display.textContent.replace(',', '.')))
-            console.log('-----> 2 - Valor Pendente: ' + numeroAnterior)
-            console.log('====================================')
+            console.log('%c --------> 2 - Operador Atual: ' + operador, 'color: blue')
+            console.log('%c --------> 2 - Valor Atual: ' + parseFloat(contaAtual.textContent.replace(',', '.')), 'color: blue')
+            console.log('%c --------> 2 - Valor Pendente: ' + numeroAnterior, 'color: blue')
+
+            displayHistoric();
         }
     }
 }
 operadores.forEach(operador => operador.addEventListener('click', selecionarOperador));
 
-//Botão igual
+
+//Quando clicado no Botão igual
 const ativarIgual = () => {
+
+    console.warn('%c ----> IGUAL ATIVADO ' + operador, 'color: red')
+
+    igualAtivado = true;
+
     calcular();
+    displayHistoric();
     operador = undefined;
+
 }
 document.getElementById('igual').addEventListener('click', ativarIgual);
 
+
 //Apagar display último número digitado
-const limparDisplay = () => display.textContent = '';
+//Apagar histórico do display
+const limparDisplay = () => contaAtual.textContent = '';
+const limparHistoric = () => historic.textContent = '';
 document.getElementById('limparDisplay').addEventListener('click', limparDisplay);
+
 
 //Limpar Calculo total
 const limparCalculo = () => {
     limparDisplay();
+    limparHistoric();
     operador = undefined;
     novoNumero = true;
     numeroAnterior = undefined;
 }
 document.getElementById('limparDisplay').addEventListener('click', limparCalculo);
 
+
 //Backspace
-const removerUltimoNumero = () => display.textContent = display.textContent.slice(0, -1);
+const removerUltimoNumero = () => {
+
+    console.warn('%c ----> REMOVER ÚLTIMO NÚMERO ATIVADO ', 'color: red')
+    contaAtual.textContent = contaAtual.textContent.slice(0, -1);
+}
 backspace.addEventListener('click', removerUltimoNumero);
 
 
-//Positivo ou Negativo
+//Botão Positivo ou Negativo
 const inverterSinal = () => {
+    console.warn('%c ----> INVERTER SINAL ATIVADO ', 'color: red')
     novoNumero = true;
-    atualizarDisplay(display.textContent * -1)
+    atualizarDisplay(contaAtual.textContent * -1)
 }
 document.getElementById('inverter').addEventListener('click', inverterSinal);
 
-//Virgula ou Decimal
+//Botão Virgula ou Decimal
 const inserirDecimal = () => {
 
-    console.log('----> INSERIR DECIMAL')
+    console.warn('%c ----> INSERIR DECIMAL ATIVADO ', 'color: red')
 
     if (novoNumero) {
-        display.textContent = '0,';
+        contaAtual.textContent = '0,';
         novoNumero = false;
     } else {
-        if (display.textContent.indexOf(',') == -1) {
-            display.textContent += ',';
+        if (contaAtual.textContent.indexOf(',') == -1) {
+            contaAtual.textContent += ',';
         }
     }
 }
@@ -247,6 +305,8 @@ const mapearTeclado = (evento) => {
 
 document.addEventListener('keydown', mapearTeclado)
 
+
+//Para ativar calculadora no popup
 function popup() {
     let altura = document.getElementById('calculator').clientHeight;
     let largura = document.getElementById('calculator').clientWidth;
