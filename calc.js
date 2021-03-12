@@ -439,10 +439,10 @@ const openHistoric = () => {
 
             if (veryBtnHist == 'Abrir') {
                 hist.style.marginLeft = posLeft + 'px';
-                hist.style.marginRight = pos + 'px';
+                hist.style.right = pos + 'px';
             } else {
                 hist.style.marginLeft = -pos + 'px';
-                hist.style.marginRight = pos + 'px';
+                hist.style.right = pos + 'px';
             }
         }
     }, 1);
@@ -483,7 +483,6 @@ const verifyHist = () => {
     }
 }
 verifyHist();
-
 atualizaHist();
 
 //Para ativar calculadora no popup

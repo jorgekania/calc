@@ -54,7 +54,7 @@ body{
 
 .lista-historico{
     width: 100%;
-    height: 570px;
+    height: 530px;
     padding: 15px 5px 15px 20px;
     overflow-y: auto;
     font-family: 'Roboto Mono', monospace;
