@@ -419,13 +419,17 @@ const openHistoric = () => {
     const btnHist = document.getElementById('btnHistoric');
     let pos = 0;
     let posLeft = -300;
+    let veryBtnHist = btnHist.textContent;
+
     let id = setInterval(function () {
         if (pos == 300) {
 
-            if (btnHist.textContent == 'Abrir') {
+            if (veryBtnHist == 'Abrir') {
                 btnHist.textContent = 'Fechar';
+                document.cookie = 'btnHistCalc=Open';
             } else {
                 btnHist.textContent = 'Abrir';
+                document.cookie = 'btnHistCalc=Close';
             }
 
             clearInterval(id);
@@ -433,18 +437,52 @@ const openHistoric = () => {
             pos++;
             posLeft++;
 
-            if (btnHist.textContent == 'Abrir') {
+            if (veryBtnHist == 'Abrir') {
                 hist.style.marginLeft = posLeft + 'px';
-                hist.style.marginRright = pos + 'px';
+                hist.style.marginRight = pos + 'px';
             } else {
                 hist.style.marginLeft = -pos + 'px';
-                hist.style.marginRright = pos + 'px';
+                hist.style.marginRight = pos + 'px';
             }
         }
     }, 1);
 }
 
 document.getElementById('btnHistoric').addEventListener('click', openHistoric);
+
+//Criar o cookie que vai verificar se o histórico esta aberto
+function getCookie(name) {
+    var cookies = document.cookie;
+    var prefix = name + "=";
+    var begin = cookies.indexOf("; " + prefix);
+
+    if (begin == -1) {
+
+        begin = cookies.indexOf(prefix);
+
+        if (begin != 0) {
+            return null;
+        }
+
+    } else {
+        begin += 2;
+    }
+
+    var end = cookies.indexOf(";", begin);
+
+    if (end == -1) {
+        end = cookies.length;
+    }
+
+    return unescape(cookies.substring(begin + prefix.length, end));
+}
+let cookieBtnHistoric = getCookie('btnHistCalc');
+const verifyHist = () => {
+    if (cookieBtnHistoric == 'Open') {
+        openHistoric();
+    }
+}
+verifyHist();
 
 atualizaHist();
 
