@@ -21,6 +21,77 @@ let numeroAnterior;
 let resultado;
 let txt;
 
+//===============================================
+//Preencher o histórico lateral da calculadora
+//===============================================
+const getHistoric = () => JSON.parse(localStorage.getItem('hCalc')) ?? [];
+const setCalc = (banco) => localStorage.setItem('hCalc', JSON.stringify(banco));
+
+//Atualiza a lista de histórico na div lateral
+const criarHistoricoCalculo = (numA, op, numB, res, indice) => {
+
+    const itens = document.getElementById('listaHistorico');
+    const newItem = document.createElement('div');
+
+    newItem.innerHTML = `
+        ===================================<br>
+        <input type="button" class="apagarItem" id="apagarItem" data-indice="${indice}" value=" ✘ "> » ${parseFloat(numA).toLocaleString('BR')} ${op} ${parseFloat(numB).toLocaleString('BR')} = ${parseFloat(res).toLocaleString('BR')}<br>`;
+    itens.appendChild(newItem);
+}
+
+const limparHistorico = () => {
+    const listaHistorico = document.getElementById('listaHistorico');
+    while (listaHistorico.firstChild) {
+        listaHistorico.removeChild(listaHistorico.lastChild);
+    }
+}
+
+const atualizaHist = () => {
+    limparHistorico();
+    const banco = getHistoric();
+    banco.forEach((item, indice) => criarHistoricoCalculo(item.numeroAnterior, item.operador, item.numeroAtual, item.resultado, indice));
+}
+
+const novoCalculo = () => {
+    const banco = getHistoric();
+    banco.push({
+        "numeroAnterior": numeroAnterior,
+        "operador": operador,
+        "numeroAtual": numeroAtual,
+        "resultado": resultado
+    });
+    setCalc(banco);
+    atualizaHist();
+}
+
+const apagarCalculo = (event) => {
+    const elemento = event.target;
+    if (elemento.type === 'button') {
+        const indice = elemento.dataset.indice;
+        removeCalc(indice);
+    }
+}
+
+const removeCalc = (indice) => {
+    const banco = getHistoric();
+    banco.splice(indice, 1);
+    setCalc(banco);
+    atualizaHist();
+}
+
+const deleteAll = () => {
+    localStorage.clear()
+    atualizaHist();
+}
+
+atualizaHist();
+document.getElementById('listaHistorico').addEventListener('click', apagarCalculo);
+document.getElementById('deleteAll').addEventListener('click', deleteAll);
+
+//===============================================
+////Preencher o histórico lateral da calculadora
+//===============================================
+
 //Se tiver operação pendente
 let operacaoPendente = () => operador !== undefined
 
@@ -41,6 +112,9 @@ const calcular = () => {
 
         novoNumero = true;
         resultado = eval(`${numeroAnterior}${operador}${numeroAtual}`);
+
+        novoCalculo();
+        atualizaHist();
 
         console.log('%c --------> Valor Pendente: ' + numeroAnterior, 'color: blue')
         console.log('%c --------> Valor Atual: ' + numeroAtual, 'color: blue')
@@ -68,17 +142,19 @@ const displayHistoric = () => {
             historic.textContent = numeroAnterior + operador + numeroAtual;
             atualizarDisplay(resultado);
             opPercent = false;
+
             console.log('%c --------> - Histórico Número Atual:  ' + numeroAtual, 'color: blue')
 
         } else {
 
             if (igualAtivado) {
                 historic.textContent = numeroAnterior + operador + numeroAtual + '=';
+
                 console.log('%c --------> - Histórico Número Atual:  ' + numeroAtual, 'color: blue')
+
                 igualAtivado = false;
             } else {
                 historic.textContent = numeroAnterior + operador;
-                // contaAtual.textContent = '';
             }
         }
     }
@@ -188,6 +264,9 @@ const selecionarOperador = (evento) => {
                 resultado = eval(`${numeroAnterior}${operador}${numeroAtual}`);
 
             }
+
+            novoCalculo();
+            atualizaHist();
 
             console.log('%c --------> Valor Atual Convertido: ' + numeroAtual, 'color: blue')
             console.log('%c --------> Valor a Calcular: ' + numeroAnterior, 'color: blue')
@@ -333,6 +412,41 @@ const mapearTeclado = (evento) => {
 
 document.addEventListener('keydown', mapearTeclado)
 
+//Ativa a div para mostrar o histórico de operações feitas
+const openHistoric = () => {
+
+    const hist = document.getElementById('historicos');
+    const btnHist = document.getElementById('btnHistoric');
+    let pos = 0;
+    let posLeft = -300;
+    let id = setInterval(function () {
+        if (pos == 300) {
+
+            if (btnHist.textContent == 'Abrir') {
+                btnHist.textContent = 'Fechar';
+            } else {
+                btnHist.textContent = 'Abrir';
+            }
+
+            clearInterval(id);
+        } else {
+            pos++;
+            posLeft++;
+
+            if (btnHist.textContent == 'Abrir') {
+                hist.style.marginLeft = posLeft + 'px';
+                hist.style.marginRright = pos + 'px';
+            } else {
+                hist.style.marginLeft = -pos + 'px';
+                hist.style.marginRright = pos + 'px';
+            }
+        }
+    }, 1);
+}
+
+document.getElementById('btnHistoric').addEventListener('click', openHistoric);
+
+atualizaHist();
 
 //Para ativar calculadora no popup
 function popup() {

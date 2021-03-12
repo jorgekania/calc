@@ -9,33 +9,46 @@
 </head>
 
 <body>
-    <div class="calculator" id="calculator">
-        <div class="display" id="display">
-            <div id="historic"></div>
-            <div id="contaAtual"></div>
+    <div class="container">
+        <div class="calculator" id="calculator">
+            <div class="display" id="display">
+                <div id="historic"></div>
+                <div id="contaAtual"></div>
+            </div>
+            <div class="calculator-buttons">
+                <button id="limparDisplay">CE</button>
+                <button id="backspace">⇦</button>
+                <button class="porcentagem" id="operadorPorcentagem">%</button>
+                <button class="dividir" id="operadorDividir">÷</button>
+                <button id="tecla7">7</button>
+                <button id="tecla8">8</button>
+                <button id="tecla9">9</button>
+                <button class="multiplicar" id="operadorMultiplicar">*</button>
+                <button id="tecla4">4</button>
+                <button id="tecla5">5</button>
+                <button id="tecla6">6</button>
+                <button class="subtrair" id="operadorSubtrair">-</button>
+                <button id="tecla1">1</button>
+                <button id="tecla2">2</button>
+                <button id="tecla3">3</button>
+                <button class="somar" id="operadorAdicionar">+</button>
+                <button id="inverter">±</button>
+                <button id="tecla0">0</button>
+                <button id="decimal">,</button>
+                <button class="igual" id="igual">=</button>
+            </div>
         </div>
-        <div class="calculator-buttons">
-            <button id="limparDisplay">CE</button>
-            <button id="backspace">⇦</button>
-            <button class="porcentagem" id="operadorPorcentagem">%</button>
-            <button class="dividir" id="operadorDividir">÷</button>
-            <button id="tecla7">7</button>
-            <button id="tecla8">8</button>
-            <button id="tecla9">9</button>
-            <button class="multiplicar" id="operadorMultiplicar">*</button>
-            <button id="tecla4">4</button>
-            <button id="tecla5">5</button>
-            <button id="tecla6">6</button>
-            <button class="subtrair" id="operadorSubtrair">-</button>
-            <button id="tecla1">1</button>
-            <button id="tecla2">2</button>
-            <button id="tecla3">3</button>
-            <button class="somar" id="operadorAdicionar">+</button>
-            <button id="inverter">±</button>
-            <button id="tecla0">0</button>
-            <button id="decimal">,</button>
-            <button class="igual" id="igual">=</button>
+        <div class="historicos" id="historicos">
+            <h4>HISTÓRICO DE CÁLCULOS</h4>
+            <div class="lista">
+                <div class="lista-historico" id="listaHistorico">
+
+                </div>
+                <div class="btn-historico" id="btnHistoric">Abrir</div>
+            </div>
+            <div class="deleteAll" id="deleteAll">✘ limpar</div>
         </div>
+
     </div>
     <script src="./calc.js"></script>
 </body>

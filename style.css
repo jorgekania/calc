@@ -9,14 +9,82 @@ body{
     background-color: #F9F9F9;
     padding: 90px 0;
 }
+.container{
+    width: 100%;
+    display: flex;
+    margin: 0 auto;
+    justify-content: center;
+}
+
+.historicos{
+    width: 300px;
+    background-color: #e0dede;
+    border-radius: 0 5px 5px 0;
+    margin-left: -300px;
+    align-items: center;
+    justify-content: flex-end;
+}
+.historicos h4{
+    width: 100%;
+    padding: 15px 5px 0 20px;
+    font-family: 'Roboto Mono', monospace;
+}
+.lista{
+    display: flex;
+    width: 300px;
+    background-color: #e0dede;
+    border-radius: 0 5px 5px 0;
+    align-items: center;
+    justify-content: flex-end;
+}
+.btn-historico{
+    background-color: #e0dede;
+    width: 35px;
+    height: 75px;
+    margin-right: -20px;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    writing-mode:vertical-rl;
+    justify-content: center;
+    text-align: center;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 15px;
+    letter-spacing: 0.1rem;
+}
+
+.lista-historico{
+    width: 100%;
+    height: 570px;
+    padding: 15px 5px 15px 20px;
+    overflow-y: auto;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.75rem;
+}
+
+.apagarItem{
+    cursor: pointer;
+}
+
+.deleteAll{
+    display: block;
+    text-align: right;
+    padding: 0 15px 15px 0;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.deleteAll:hover{
+    color:rgb(48, 207, 42);
+}
 
 .calculator {
     width: 400px;
-    margin: 0 auto;
     background-color: #2b7a43;
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 15px black;
+    z-index: 1;
 }
 
 .display{
