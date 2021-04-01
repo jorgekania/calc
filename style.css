@@ -6,7 +6,7 @@
 }
 
 body{
-    background-color: #F9F9F9;
+    background-color: #dadada;
     padding: 90px 0;
 }
 .container{
@@ -28,12 +28,14 @@ body{
     width: 100%;
     padding: 15px 5px 0 20px;
     font-family: 'Roboto Mono', monospace;
+    background-color: #ffffff;
+    border-radius: 0 5px 0 0;
 }
 .lista{
     display: flex;
     width: 300px;
-    background-color: #e0dede;
-    border-radius: 0 5px 5px 0;
+    background-color: #ffffff;
+
     align-items: center;
     justify-content: flex-end;
 }
@@ -50,6 +52,7 @@ body{
     font-family: 'Roboto Mono', monospace;
     font-size: 15px;
     letter-spacing: 0.1rem;
+    background-color: #ffffff;
 }
 
 .lista-historico{
@@ -72,6 +75,8 @@ body{
     font-family: 'Roboto Mono', monospace;
     font-size: 1rem;
     cursor: pointer;
+    background-color: #ffffff;
+    border-radius: 0 0 5px 0;
 }
 
 .deleteAll:hover{
